@@ -20,7 +20,7 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
-	vidPlayer.idleMovie();
+	vidPlayer.update();
 	bool bNewFrame = vidPlayer.isFrameNew();
 	if(bNewFrame){
 		colorImg.setFromPixels(vidPlayer.getPixels(), inputWidht,inputHeight);

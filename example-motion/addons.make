@@ -1,1 +1,2 @@
-ofxLibsndfileRecorder
+ofxOpenCv
+ofxCvMotionTemplates
