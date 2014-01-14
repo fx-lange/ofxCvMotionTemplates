@@ -1,7 +1,14 @@
 #include "testApp.h"
 
+bool foo = false;
+
 //--------------------------------------------------------------
 void testApp::setup(){
+	//workaround for strange linking error:
+	//http://forum.openframeworks.cc/t/undefined-reference-to-cvfloodfill-linux32
+	if(foo)
+		cvFloodFill(NULL, CvPoint(), cvScalarAll(0));
+
 	vidPlayer.loadMovie("wink3.mp4");
 	inputWidht = vidPlayer.getWidth();
 	inputHeight = vidPlayer.getHeight();
@@ -13,8 +20,6 @@ void testApp::setup(){
 
 	colorImg.allocate(inputWidht,inputHeight);
 	grayImage.allocate(inputWidht,inputHeight);
-	smallColorImg.allocate(320,240);
-	smallGrayImg.allocate(320,240);
 	motionImg.allocate(inputWidht,inputHeight);
 }
 
@@ -26,19 +31,17 @@ void testApp::update(){
 		colorImg.setFromPixels(vidPlayer.getPixels(), inputWidht,inputHeight);
 	}
 	grayImage = colorImg;
-	smallColorImg.scaleIntoMe(colorImg);
-	smallGrayImg.scaleIntoMe(grayImage);
 	motionImg = motionHistory->calculateMotions(grayImage);
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
 	ofSetColor(255,255,255);
-	smallColorImg.draw(0,0);
-	smallGrayImg.draw(0,240);
+	colorImg.draw(0,0,320,240);
+	grayImage.draw(0,240,320,240);
 	motionImg.draw(320,0);
 	vector <ofxCvMotionBlob> & motions = motionHistory->getLocalMotions();
-	for(int i=0;i < motions.size(); i++){
+	for(int i=0;i < (int)motions.size(); i++){
 		motions[i].draw(320,0);
 	}
 }

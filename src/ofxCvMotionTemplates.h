@@ -29,7 +29,7 @@ public:
 		if( _height != 0 ) { scaley = h/_height; } else { scaley = 1.0f; }
 
 		ofPushMatrix();
-//		ofTranslate(x,y);
+		ofTranslate(x,y);
 //		glScaled(scalex, scaley, 0.0 );
 		ofNoFill();
 		ofSetColor(10,25,255);

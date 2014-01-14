@@ -28,10 +28,8 @@ class testApp : public ofBaseApp{
 		ofxCvMotionTemplates * 	motionHistory;
 
         ofxCvColorImage			colorImg;
-        ofxCvColorImage			smallColorImg;
-        ofxCvColorImage			motionImg;
+        ofxCvGrayscaleImage			motionImg;
         ofxCvGrayscaleImage 	grayImage;
-        ofxCvGrayscaleImage		smallGrayImg;
 
 
         bool live;
