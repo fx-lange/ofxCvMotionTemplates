@@ -39,6 +39,7 @@ void testApp::draw(){
 	ofSetColor(255,255,255);
 	colorImg.draw(0,0,320,240);
 	grayImage.draw(0,240,320,240);
+	ofSetColor(0,225,55);
 	motionImg.draw(320,0);
 	vector <ofxCvMotionBlob> & motions = motionHistory->getLocalMotions();
 	for(int i=0;i < (int)motions.size(); i++){
