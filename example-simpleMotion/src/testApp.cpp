@@ -10,6 +10,7 @@ void testApp::setup(){
     vidPlayer.setLoopState(OF_LOOP_NORMAL);
 
 	motionHistory = new ofxCvMotionTemplates(inputWidht,inputHeight);
+	motionHistory->setup();
 
 	colorImg.allocate(inputWidht,inputHeight);
 	grayImage.allocate(inputWidht,inputHeight);

@@ -15,14 +15,12 @@ ofxCvMotionTemplates::ofxCvMotionTemplates(int _width,int _height){
 	MIN_TIME_DELTA = 0.05;
 	aperture_size = 3;
 	threshold = 50;
-	seg_threshold = MAX_TIME_DELTA; //FXTODO - see opencv learning book 346
+	seg_threshold = MAX_TIME_DELTA; //TODO - see opencv learning book 346
 	erodeIterations = 1;
 	frameBufferSize = 4;
 	minMotionArea = 100;
 	isInit = false;
 	isSilhouetteBufferActive = false;
-
-	setup();
 }
 
 void ofxCvMotionTemplates::setup(){

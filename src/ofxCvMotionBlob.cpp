@@ -1,6 +1,6 @@
 #include "ofxCvMotionBlob.h"
 
-void ofxCvMotionBlob::draw(int x,int y,int _width=0,int _height=0){
+void ofxCvMotionBlob::draw(int x,int y,int _width,int _height){
 	float scalex = 0.0f;
 	float scaley = 0.0f;
 

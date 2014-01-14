@@ -1,14 +1,10 @@
-/*
- * ofxCvMotionTemplates.h
- *
- *   Author: Felix Lange | spta.de
- */
 #pragma once
+
+#include "ofxCvMotionBlob.h"
 
 class ofxCvMotionTemplates{
 
-private:
-
+protected:
 	int frameBufferSize;			// number of cyclic frame buffer used for motion detection
 									// (should, probably, depend on FPS)
 									// to change N requires a reset of the frame buffer
@@ -16,7 +12,7 @@ private:
 	int 	lastIdx;				//points to the current index in the frame buffer
 
 	IplImage 	**buf,				// image ring  buffer
-				*mhi,				// motion template (aka motion history image) - updatet
+				*mhi,				// motion template (aka motion history image) - updated
 				*segmask,			// image in which each region of isolated motion is marked a distinct nonzero number
 				*mask,				// valid gradient orientation mask - nonzero values indicates valid gradients
 				*orientation,		// floating-point image that gives the gradient direction's angle at each point
@@ -24,34 +20,27 @@ private:
 				*silh;
 
 
-	/**silhouette ringbuffer
-	 * size, active, pointer, counter
-	 * perhaps silhouette buffer should contain IplImages instead of ofxCvfGrayscales
-	 */
-	IplImage ** silhouetteBuffer;			//silhouette image ring buffer - used for visual output
+	//silhouette ring buffer - used for visual/debug output
+	IplImage ** silhouetteBuffer;
 	int 		silhouetteBufferSize,
 				lastSilhIdx;	//size and pointer to the current index
 	bool isSilhouetteBufferActive;
 
 
-
-
 	CvMemStorage * storage;			//openCv intern memory storage
 
-	vector <ofxCvMotionBlob> motions;
+	vector<ofxCvMotionBlob> motions;
 
 	int width, height;
 	bool 	verbose,
 			isInit;
 
-	void clear();
-	void setup();
 
 public:
 
 	float 	MHI_DURATION;			// sets how long motion history pixel are allowed to remain in the mhi
-	int		minMotionArea;			// motions with smaller area get ignored
-	int 	threshold;				// threshold for the silhouette
+	float	minMotionArea;			// motions with smaller area get ignored
+	float 	threshold;				// threshold for the silhouette
 	int 	aperture_size;			// size of the gradient operator
 										// -1 => 3x3 CV_SCHARR gradient filter
 										// 3,5,7 => default Sobel filter (3x3,5x5 or 7x7)
@@ -69,6 +58,9 @@ public:
 	~ofxCvMotionTemplates(){
 		//FXTODO delete[] silhBuffer - memoryleak
 	}
+
+	void clear();
+	void setup();
 
 	void setFrameBufferSize(int _N){
 		clear();
