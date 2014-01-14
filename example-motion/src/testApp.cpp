@@ -1,14 +1,7 @@
 #include "testApp.h"
 
-bool foo = false;
-
 //--------------------------------------------------------------
 void testApp::setup(){
-	//workaround for strange linking error:
-	//http://forum.openframeworks.cc/t/undefined-reference-to-cvfloodfill-linux32
-	if(foo)
-		cvFloodFill(NULL, CvPoint(), cvScalarAll(0));
-
 	vidPlayer.loadMovie("wink3.mp4");
 	inputWidht = vidPlayer.getWidth();
 	inputHeight = vidPlayer.getHeight();
