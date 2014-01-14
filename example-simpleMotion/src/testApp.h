@@ -35,7 +35,6 @@ class testApp : public ofBaseApp{
         bool live;
 
         float inputWidht, inputHeight;
-
 };
 
 #endif

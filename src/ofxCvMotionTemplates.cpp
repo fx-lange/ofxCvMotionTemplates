@@ -232,7 +232,8 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 			blob.pts.push_back(ofPoint(blob.boundingRect.x + blob.boundingRect.width, blob.boundingRect.y + blob.boundingRect.height));
 			blob.pts.push_back(ofPoint(blob.boundingRect.x, blob.boundingRect.y + blob.boundingRect.height));
 			blob.nPts = 4;
-			blob.setWH(width,height);
+			blob.w = width;
+			blob.h  = height;
 
 			motions.push_back(blob);
 		}
