@@ -45,7 +45,25 @@ void ofxCvMotionTemplates::setup(){
 
 	storage = cvCreateMemStorage(0);
 	isInit = true;
+
+#ifdef USE_OFXGUI_FOR_MT
+	setupGui();
+#endif
 }
+
+#ifdef USE_OFXGUI_FOR_MT
+void ofxCvMotionTemplates::setupGui(){
+	gui.setup("motion_template","motempl.xml",50,50);
+	gui.add(MHI_DURATION.setup("MHI_Duration",1,0.01,3));
+	gui.add(minMotionArea.setup("minMotionArea",100,0,500));
+	gui.add(threshold.setup("threshold",50,0,255));
+	gui.add(MIN_TIME_DELTA.setup("minTimeDelta",0.005,0.001,0.1));
+	gui.add(MAX_TIME_DELTA.setup("maxTimeDelta",0.03,0.001,0.1));
+	gui.add(seg_threshold.setup("seg_threshold",0.5,0.001,2));
+	gui.add(aperture_size.setup("aperture_size",3,3,7));
+	gui.loadFromFile("motempl.xml");
+}
+#endif
 
 void ofxCvMotionTemplates::clear(){
 
@@ -130,12 +148,13 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 	}
 	//Declarations
 	double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
+//	cout << "timestamp: " << timestamp << " avg ticks between:" << timestamp - lastTimestamp << endl;
+//	lastTimestamp = timestamp;
 	CvSeq* seq;
 	CvRect comp_rect;
 	double count;
 	double angle;
 	CvPoint center;
-	double magnitude;
 	CvScalar color2;
 
 
@@ -163,6 +182,9 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 	 * min and max allowed gradient magnitude
 	 * aperture_size = gradient filter (see declaration)
 	 */
+		if(aperture_size % 2 == 0){
+			aperture_size = aperture_size+1; //only 3,5 or 7
+		}
 		cvCalcMotionGradient( mhi, mask, orientation, MIN_TIME_DELTA, MAX_TIME_DELTA, aperture_size );
 
 	/** ISOLATE LOCAL MOTIONS
@@ -182,13 +204,11 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 				continue;
 				comp_rect = cvRect( 0, 0, width, height );
 				color2 = CV_RGB(255,255,255);
-				magnitude = 100;
 			}else { // i-th motion component
 				comp_rect = ((CvConnectedComp*)cvGetSeqElem( seq, i ))->rect;
 				if( (comp_rect.width + comp_rect.height)*2 < minMotionArea ) // reject very small components
 					continue;
 				color2 = CV_RGB(255,0,0);
-				magnitude = 30;
 			}
 
 			// select component ROI
@@ -199,7 +219,6 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 
 			// calculate orientation
 			angle = cvCalcGlobalOrientation( orientation, mask, mhi, timestamp, MHI_DURATION);
-			angle = 360.0 - angle;  // adjust for images with top-left origin
 
 			// calculate number of points within silhouette ROI
 			count = cvNorm( silh, 0, CV_L1, 0 );

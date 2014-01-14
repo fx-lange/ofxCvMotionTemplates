@@ -17,7 +17,7 @@ void ofxCvMotionBlob::draw(int x,int y,int _width,int _height){
 		ofVertex(pts[i].x,pts[i].y);
 	}
 	ofEndShape(true);
-	double magnitude =  (count/area/5);
+	double magnitude =  (count/area); //TODO add smooth parameter
 	ofSetColor(10,255,25);
 	ofEllipse(centroid.x,centroid.y,round(magnitude*1.2),round(magnitude*1.2));
 	ofLine(centroid.x,centroid.y,

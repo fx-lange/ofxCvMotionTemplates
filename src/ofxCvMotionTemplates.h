@@ -2,6 +2,11 @@
 
 #include "ofxCvMotionBlob.h"
 
+//#define USE_OFXGUI_FOR_MT
+#ifdef USE_OFXGUI_FOR_MT
+#include "ofxGui.h"
+#endif
+
 class ofxCvMotionTemplates{
 
 protected:
@@ -35,8 +40,20 @@ protected:
 	bool 	verbose,
 			isInit;
 
+	double lastTimestamp;
+
+#ifdef USE_OFXGUI_FOR_MT
+	void setupGui();
+#endif
 
 public:
+
+#ifdef USE_OFXGUI_FOR_MT //parameter documentation below
+    ofxPanel gui;
+    ofxFloatSlider MHI_DURATION, minMotionArea, threshold;
+    ofxFloatSlider MIN_TIME_DELTA, MAX_TIME_DELTA, seg_threshold;
+    ofxIntSlider aperture_size;
+#else
 
 	float 	MHI_DURATION;			// sets how long motion history pixel are allowed to remain in the mhi
 	float	minMotionArea;			// motions with smaller area get ignored
@@ -49,7 +66,8 @@ public:
 										// halfway below and halfway above the average number of time-stamp ticks between each
 										// ... silhouette in successive calls to cvUpdateMotionHistory should work well
 	double seg_threshold;				// maximum downward step (from current time to previous motion)
-										// ... that you'll accept as attached motion.
+										// ... that you'll accept as attached motion. (1.5 times avg. difference between timestamps)
+#endif
 
 	int erodeIterations, erodeKernelSize;
 
