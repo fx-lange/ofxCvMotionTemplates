@@ -1,2 +1,4 @@
 example-*/bin/*
+!example-*/bin/data/*
+!example-*/bin/libs/*
 example-*/obj/*
