@@ -2,7 +2,7 @@
 
 #include "ofxCvMotionBlob.h"
 
-//#define USE_OFXGUI_FOR_MT
+#define USE_OFXGUI_FOR_MT
 #ifdef USE_OFXGUI_FOR_MT
 #include "ofxGui.h"
 #endif
