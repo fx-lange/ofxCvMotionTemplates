@@ -2,6 +2,7 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	vidPlayer.loadMovie("wink3.mp4");
 	inputWidht = vidPlayer.getWidth();
 	inputHeight = vidPlayer.getHeight();
@@ -129,10 +130,10 @@ void testApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
-
 }
 
 //--------------------------------------------------------------
 void testApp::exit(){
-
+	vidPlayer.stop();
+	ofLogVerbose("exit");
 }
