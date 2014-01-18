@@ -18,6 +18,7 @@ void silhouettesApp::setup(){
 	colorImg.allocate(inputWidht,inputHeight);
 	grayImg.allocate(inputWidht,inputHeight);
 	silhuetteImg.allocate(inputWidht,inputHeight);
+	smallSilhuetteImg.allocate(smallW,smallH);
 	motionImg.allocate(inputWidht,inputHeight);
 
 	motionHistory->activateSilhouetteBuffer(10);
@@ -34,11 +35,13 @@ void silhouettesApp::update(){
 		motionImg = motionHistory->calculateMotions(grayImg);
 
 		silhuetteImg = motionHistory->getBufferedSilhouetteImg(2);
+		smallSilhuetteImg.scaleIntoMe(silhuetteImg);
 		transSilhuetteImg.setFromPixels(smallSilhuetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
 		transSilhuetteImg.setImageType(OF_IMAGE_COLOR_ALPHA);
 		setBlackToTransparent(transSilhuetteImg);
 
 		silhuetteImg = motionHistory->getBufferedSilhouetteImg(5);
+		smallSilhuetteImg.scaleIntoMe(silhuetteImg);
 		transSilhuetteImg2.setFromPixels(smallSilhuetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
 		transSilhuetteImg2.setImageType(OF_IMAGE_COLOR_ALPHA);
 		setBlackToTransparent(transSilhuetteImg2);//wird als ofx funktion benötigt

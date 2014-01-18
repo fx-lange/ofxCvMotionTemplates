@@ -31,7 +31,7 @@ class silhouettesApp : public ofBaseApp{
         ofxCvColorImage			colorImg;
         ofxCvGrayscaleImage		motionImg;
         ofxCvGrayscaleImage 	grayImg;
-        ofxCvGrayscaleImage		silhuetteImg;
+        ofxCvGrayscaleImage		silhuetteImg, smallSilhuetteImg;
 
         ofImage transSilhuetteImg,transSilhuetteImg2;
 
