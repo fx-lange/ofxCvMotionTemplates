@@ -29,19 +29,15 @@ class testApp : public ofBaseApp{
 		ofxCvMotionTemplates * 	motionHistory;
 
         ofxCvColorImage			colorImg;
-        ofxCvColorImage			smallColorImg;
         ofxCvGrayscaleImage		motionImg;
-        ofxCvGrayscaleImage 	grayImage;
-        ofxCvGrayscaleImage		smallGrayImg;
+        ofxCvGrayscaleImage 	grayImg;
         ofxCvGrayscaleImage		silhuetteImg;
-        ofxCvGrayscaleImage		smallSilhuetteImg;
 
         ofImage transSilhuetteImg,transSilhuetteImg2;
 
         bool live;
 
         int inputWidht, inputHeight, smallW, smallH;
-
 };
 
 #endif

@@ -16,11 +16,8 @@ void testApp::setup(){
 	motionHistory->setup();
 
 	colorImg.allocate(inputWidht,inputHeight);
-	grayImage.allocate(inputWidht,inputHeight);
+	grayImg.allocate(inputWidht,inputHeight);
 	silhuetteImg.allocate(inputWidht,inputHeight);
-	smallColorImg.allocate(smallW,smallH);
-	smallGrayImg.allocate(smallW,smallH);
-	smallSilhuetteImg.allocate(smallW,smallH);
 	motionImg.allocate(inputWidht,inputHeight);
 
 	motionHistory->activateSilhouetteBuffer(10);
@@ -33,19 +30,15 @@ void testApp::update(){
 	if(bNewFrame){
 		colorImg.setFromPixels(vidPlayer.getPixels(), inputWidht,inputHeight);
 
-		grayImage = colorImg;
-		smallColorImg.scaleIntoMe(colorImg);
-		smallGrayImg.scaleIntoMe(grayImage);
-		motionImg = motionHistory->calculateMotions(grayImage);
+		grayImg = colorImg;
+		motionImg = motionHistory->calculateMotions(grayImg);
 
 		silhuetteImg = motionHistory->getBufferedSilhouetteImg(2);
-		smallSilhuetteImg.scaleIntoMe(silhuetteImg);
 		transSilhuetteImg.setFromPixels(smallSilhuetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
 		transSilhuetteImg.setImageType(OF_IMAGE_COLOR_ALPHA);
 		setBlackToTransparent(transSilhuetteImg);
 
 		silhuetteImg = motionHistory->getBufferedSilhouetteImg(5);
-		smallSilhuetteImg.scaleIntoMe(silhuetteImg);
 		transSilhuetteImg2.setFromPixels(smallSilhuetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
 		transSilhuetteImg2.setImageType(OF_IMAGE_COLOR_ALPHA);
 		setBlackToTransparent(transSilhuetteImg2);//wird als ofx funktion benötigt
@@ -69,8 +62,8 @@ void testApp::setBlackToTransparent(ofImage & img){
 //--------------------------------------------------------------
 void testApp::draw(){
 	ofSetColor(255,255,255);
-	smallColorImg.draw(0,0);
-	smallGrayImg.draw(0,smallH);
+	colorImg.draw(0,0,smallW,smallH);
+	grayImg.draw(0,smallH,smallW,smallH);
 	ofEnableAlphaBlending();
 	ofSetColor(255,35,48,100);
 	transSilhuetteImg2.draw(0,smallH);
