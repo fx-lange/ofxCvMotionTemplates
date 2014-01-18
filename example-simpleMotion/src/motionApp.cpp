@@ -1,7 +1,7 @@
 #include "motionApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void motionApp::setup(){
 	vidPlayer.loadMovie("wink3.mp4");
 	inputWidht = vidPlayer.getWidth();
 	inputHeight = vidPlayer.getHeight();
@@ -18,7 +18,7 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void motionApp::update(){
 	vidPlayer.update();
 	bool bNewFrame = vidPlayer.isFrameNew();
 	if(bNewFrame){
@@ -29,7 +29,7 @@ void testApp::update(){
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void motionApp::draw(){
 	ofSetColor(255,255,255);
 	colorImg.draw(0,0,320,240);
 	grayImg.draw(0,240,320,240);
@@ -42,42 +42,42 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void motionApp::keyPressed(int key){
 	int N = motionHistory->getFrameBufferSize();
 	motionHistory->setFrameBufferSize(N+1);
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void motionApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void motionApp::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void motionApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void motionApp::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void motionApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void motionApp::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void testApp::exit(){
+void motionApp::exit(){
 
 }
