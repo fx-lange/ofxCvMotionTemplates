@@ -6,7 +6,7 @@
 #include "ofxOpenCv.h"
 #include "ofxCvMotionTemplates.h"
 
-class testApp : public ofBaseApp{
+class silhouettesApp : public ofBaseApp{
 
 	public:
 		void setup();

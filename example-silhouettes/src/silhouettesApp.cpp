@@ -1,7 +1,7 @@
-#include "testApp.h"
+#include "silhouettesApp.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void silhouettesApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
 	vidPlayer.loadMovie("wink3.mp4");
 	inputWidht = vidPlayer.getWidth();
@@ -24,7 +24,7 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void silhouettesApp::update(){
 	vidPlayer.update();
 	bool bNewFrame = vidPlayer.isFrameNew();
 	if(bNewFrame){
@@ -45,7 +45,7 @@ void testApp::update(){
 	}
 }
 
-void testApp::setBlackToTransparent(ofImage & img){
+void silhouettesApp::setBlackToTransparent(ofImage & img){
 	unsigned char * pixels = img.getPixels();
 	int pixelCount = 0;
 	for(int x=0;x<smallW*4;x+=4){
@@ -60,7 +60,7 @@ void testApp::setBlackToTransparent(ofImage & img){
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void silhouettesApp::draw(){
 	ofSetColor(255,255,255);
 	colorImg.draw(0,0,smallW,smallH);
 	grayImg.draw(0,smallH,smallW,smallH);
@@ -91,42 +91,42 @@ void testApp::draw(){
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void silhouettesApp::keyPressed(int key){
 	int N = motionHistory->getFrameBufferSize();
 	motionHistory->setFrameBufferSize(N+1);
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void silhouettesApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void silhouettesApp::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void silhouettesApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void silhouettesApp::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void silhouettesApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void silhouettesApp::windowResized(int w, int h){
 }
 
 //--------------------------------------------------------------
-void testApp::exit(){
+void silhouettesApp::exit(){
 	vidPlayer.stop();
 	ofLogVerbose("exit");
 }
