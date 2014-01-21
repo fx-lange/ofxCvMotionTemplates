@@ -51,7 +51,7 @@ public:
 #ifdef USE_OFXGUI_FOR_MT //parameter documentation below
     ofxPanel gui;
     ofxFloatSlider MHI_DURATION, minMotionArea, threshold;
-    ofxFloatSlider MIN_TIME_DELTA, MAX_TIME_DELTA, seg_threshold;
+    ofxFloatSlider MIN_TIME_DELTA, MAX_TIME_DELTA, seg_threshold, minCountPerArea;
     ofxIntSlider aperture_size;
 #else
 
@@ -67,6 +67,8 @@ public:
 										// ... silhouette in successive calls to cvUpdateMotionHistory should work well
 	double seg_threshold;				// maximum downward step (from current time to previous motion)
 										// ... that you'll accept as attached motion. (1.5 times avg. difference between timestamps)
+
+	float minCountPerArea;
 #endif
 
 	int erodeIterations, erodeKernelSize;

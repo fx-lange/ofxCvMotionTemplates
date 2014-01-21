@@ -19,6 +19,7 @@ ofxCvMotionTemplates::ofxCvMotionTemplates(int _width,int _height){
 	erodeIterations = 1;
 	frameBufferSize = 4;
 	minMotionArea = 100;
+	minCountPerArea = 25;
 	isInit = false;
 	isSilhouetteBufferActive = false;
 }
@@ -61,6 +62,7 @@ void ofxCvMotionTemplates::setupGui(){
 	gui.add(MAX_TIME_DELTA.setup("maxTimeDelta",0.03,0.001,0.1));
 	gui.add(seg_threshold.setup("seg_threshold",0.5,0.001,2));
 	gui.add(aperture_size.setup("aperture_size",3,3,7));
+	gui.add(minCountPerArea.setup("count per area",25,0,100));
 	gui.loadFromFile("motempl.xml");
 }
 #endif
@@ -230,7 +232,7 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 
 			// check for the case of little motion
 			float area = (float)(comp_rect.width*comp_rect.height);
-			if( count < area * 0.25 )//FXTODO - revisit
+			if( count / area < minCountPerArea )
 				continue;
 
 			center = cvPoint( (comp_rect.x + comp_rect.width/2),
@@ -251,6 +253,8 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 			blob.nPts = 4;
 			blob.w = width;
 			blob.h  = height;
+
+			blob.forceDir.set(cos(angle*CV_PI/180),sin(angle*CV_PI/180));//TODO testing!
 
 			motions.push_back(blob);
 		}

@@ -8,6 +8,7 @@ public:
 	float angle;
 	int count;
 	int w, h;
+	ofVec2f forceDir;
 
 	void draw(int x,int y,int _width=0,int _height=0);
 };

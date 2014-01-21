@@ -33,7 +33,7 @@ class silhouettesApp : public ofBaseApp{
         ofxCvGrayscaleImage 	grayImg;
         ofxCvGrayscaleImage		silhouetteImg, smallSilhouetteImg;
 
-        ofImage transSilhuetteImg,transSilhuetteImg2;
+        ofImage transSilhouetteImg,transSilhouetteImg2;
 
         bool live;
 

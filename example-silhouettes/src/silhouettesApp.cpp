@@ -36,15 +36,15 @@ void silhouettesApp::update(){
 
 		silhouetteImg = motionHistory->getBufferedSilhouetteImg(2);
 		smallSilhouetteImg.scaleIntoMe(silhouetteImg);
-		transSilhuetteImg.setFromPixels(smallSilhouetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
-		transSilhuetteImg.setImageType(OF_IMAGE_COLOR_ALPHA);
-		setBlackToTransparent(transSilhuetteImg);
+		transSilhouetteImg.setFromPixels(smallSilhouetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
+		transSilhouetteImg.setImageType(OF_IMAGE_COLOR_ALPHA);
+		setBlackToTransparent(transSilhouetteImg);
 
 		silhouetteImg = motionHistory->getBufferedSilhouetteImg(5);
 		smallSilhouetteImg.scaleIntoMe(silhouetteImg);
-		transSilhuetteImg2.setFromPixels(smallSilhouetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
-		transSilhuetteImg2.setImageType(OF_IMAGE_COLOR_ALPHA);
-		setBlackToTransparent(transSilhuetteImg2);//wird als ofx funktion benötigt
+		transSilhouetteImg2.setFromPixels(smallSilhouetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
+		transSilhouetteImg2.setImageType(OF_IMAGE_COLOR_ALPHA);
+		setBlackToTransparent(transSilhouetteImg2);//wird als ofx funktion benötigt
 	}
 }
 
@@ -69,9 +69,9 @@ void silhouettesApp::draw(){
 	grayImg.draw(0,smallH,smallW,smallH);
 	ofEnableAlphaBlending();
 	ofSetColor(255,35,48,100);
-	transSilhuetteImg2.draw(0,smallH);
+	transSilhouetteImg2.draw(0,smallH);
 	ofSetColor(35,255,25,200);
-	transSilhuetteImg.draw(0,smallH);
+	transSilhouetteImg.draw(0,smallH);
 	ofDisableAlphaBlending();
 
 	ofSetColor(50,50,50);
@@ -79,9 +79,9 @@ void silhouettesApp::draw(){
 	ofRect(0,480,smallW,smallH);
 	ofEnableAlphaBlending();
 	ofSetColor(255,35,48,255);
-	transSilhuetteImg2.draw(0,480);
+	transSilhouetteImg2.draw(0,480);
 	ofSetColor(35,255,25,200);
-	transSilhuetteImg.draw(0,480);
+	transSilhouetteImg.draw(0,480);
 	ofDisableAlphaBlending();
 
 	ofSetColor(255,35,48);
