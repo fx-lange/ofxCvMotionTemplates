@@ -75,6 +75,16 @@ void ofxCvMotionTemplates::clear(){
 		free(buf[i]);
 	}
 	free(buf);
+
+	if(isSilhouetteBufferActive){
+		//release images and clear storage
+		for(int i=0; i < silhouetteBufferSize; i++){
+			cvReleaseImage(&(silhouetteBuffer[i]));
+			free(silhouetteBuffer[i]);
+		}
+		free(silhouetteBuffer);
+	}
+
 	cvReleaseImage(&mhi);
 	cvReleaseImage(&orientation);
 	cvReleaseImage(&segmask);
@@ -245,7 +255,9 @@ void ofxCvMotionTemplates::calculateBuffers(ofxCvGrayscaleImage & frame){
 }
 
 void ofxCvMotionTemplates::activateSilhouetteBuffer(int _bufferSize){
-	if(isSilhouetteBufferActive && silhouetteBufferSize == _bufferSize){
+	if(_bufferSize < 1){
+		return;
+	}else if(isSilhouetteBufferActive && silhouetteBufferSize == _bufferSize){
 		return; //already active and of same size
 	}else if(isSilhouetteBufferActive){
 		//release images and clear storage
@@ -254,9 +266,6 @@ void ofxCvMotionTemplates::activateSilhouetteBuffer(int _bufferSize){
 			free(silhouetteBuffer[i]);
 		}
 		free(silhouetteBuffer);
-	}
-	if(_bufferSize < 1){
-		return;
 	}
 
 	lastSilhIdx = -1;

@@ -12,7 +12,7 @@ public:
 	ofxCvMotionTemplates(int _width, int _height);
 
 	~ofxCvMotionTemplates(){
-		//TODO delete[] silhBuffer - memoryleak
+		clear();
 	}
 
 	void setup();
