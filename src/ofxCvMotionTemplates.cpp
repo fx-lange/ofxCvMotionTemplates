@@ -22,11 +22,15 @@ ofxCvMotionTemplates::ofxCvMotionTemplates(int _width,int _height){
 	minCountPerArea = 25;
 	isInit = false;
 	isSilhouetteBufferActive = false;
+
+#ifdef USE_OFXGUI_FOR_MT
+	bGuiIsSetup = false;
+#endif
 }
 
 void ofxCvMotionTemplates::setup(){
 
-	lastIdx = 0;
+	currIdx = 0;
 	CvSize size = cvSize(width,height);
 	buf = (IplImage**)malloc(frameBufferSize*sizeof(buf[0]));
 	memset( buf, 0, frameBufferSize*sizeof(buf[0]));
@@ -41,8 +45,8 @@ void ofxCvMotionTemplates::setup(){
 	orientation = cvCreateImage( size, IPL_DEPTH_32F, 1 );
 	segmask = cvCreateImage( size, IPL_DEPTH_32F, 1 );
 	mask = cvCreateImage( size, IPL_DEPTH_8U, 1 );
-	motion = cvCreateImage( size, 8, 1 );
-	silh = NULL;
+	motion = cvCreateImage( size, IPL_DEPTH_8U, 1 );
+	silh = cvCreateImage( size, IPL_DEPTH_8U, 1 );
 
 	storage = cvCreateMemStorage(0);
 	isInit = true;
@@ -54,6 +58,8 @@ void ofxCvMotionTemplates::setup(){
 
 #ifdef USE_OFXGUI_FOR_MT
 void ofxCvMotionTemplates::setupGui(){
+	if(bGuiIsSetup)
+		return;
 	gui.setup("motion_template","motempl.xml",50,50);
 	gui.add(MHI_DURATION.setup("MHI_Duration",1,0.01,3));
 	gui.add(minMotionArea.setup("minMotionArea",100,0,500));
@@ -64,6 +70,7 @@ void ofxCvMotionTemplates::setupGui(){
 	gui.add(aperture_size.setup("aperture_size",3,3,7));
 	gui.add(minCountPerArea.setup("count per area",25,0,100));
 	gui.loadFromFile("motempl.xml");
+	bGuiIsSetup = true;
 }
 #endif
 
@@ -83,6 +90,7 @@ void ofxCvMotionTemplates::clear(){
 			free(silhouetteBuffer[i]);
 		}
 		free(silhouetteBuffer);
+		isSilhouetteBufferActive = false;
 	}
 
 	cvReleaseImage(&mhi);
@@ -230,28 +238,26 @@ void ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 
 
 void ofxCvMotionTemplates::calculateBuffers(ofxCvGrayscaleImage & frame){
-	int idx1, idx2;
+	int oldestIdx;
 
-	//FXTODO - memory leak? have to clear something here?
-	cvCopyImage(frame.getCvImage(),buf[lastIdx]);
+	cvCopyImage(frame.getCvImage(),buf[currIdx]);
 
-	idx1 = lastIdx;
-	//index of (last - (N-1))th frame
-	idx2 = (lastIdx + 1) % frameBufferSize;
-	lastIdx = idx2;
+	//index of oldest frame
+	oldestIdx = (currIdx + 1) % frameBufferSize;
 
-	silh = buf[idx2];
-	//get difference between frames
-	cvAbsDiff( buf[idx1], buf[idx2], silh );
+	//get difference between current and oldest frame
+	cvAbsDiff( buf[currIdx], buf[oldestIdx], silh );
 	cvErode(silh,silh,0,erodeIterations);
 
 	//threshold the difference
-	cvThreshold( silh, silh, threshold,255, CV_THRESH_BINARY ); // and threshold it
+	cvThreshold( silh, silh, threshold,255, CV_THRESH_BINARY );
 
 	if(isSilhouetteBufferActive){
 		lastSilhIdx = (lastSilhIdx + 1) % silhouetteBufferSize;
 		cvCopyImage(silh,silhouetteBuffer[lastSilhIdx]);
 	}
+
+	currIdx = (currIdx + 1) % frameBufferSize;
 }
 
 void ofxCvMotionTemplates::activateSilhouetteBuffer(int _bufferSize){

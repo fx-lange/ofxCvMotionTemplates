@@ -60,13 +60,15 @@ public:
 protected:
 	#ifdef USE_OFXGUI_FOR_MT
 	void setupGui();
+	bool bGuiIsSetup;
 	#endif
 
 	int frameBufferSize;			// number of cyclic frame buffer used for motion detection
+									// bigger N means more time between frames, which get compared
 									// (should, probably, depend on FPS)
 									// to change N requires a reset of the frame buffer
 
-	int 	lastIdx;				//points to the current index in the frame buffer
+	int 	currIdx;				//points to the current index in the frame buffer
 
 	IplImage 	**buf,				// image ring  buffer
 				*mhi,				// motion template (aka motion history image) - updated
