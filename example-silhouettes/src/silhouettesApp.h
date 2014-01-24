@@ -20,19 +20,17 @@ class silhouettesApp : public ofBaseApp{
 		void mouseReleased(int x, int y, int button);
 		void windowResized(int w, int h);
 
-		void setBlackToTransparent(ofImage & img);
-
 		ofVideoPlayer 		vidPlayer;
 
 		ofxCvMotionTemplates * 	motionHistory;
 
         ofxCvColorImage			colorImg;
         ofxCvGrayscaleImage 	grayImg;
-        ofxCvGrayscaleImage		silhouetteImg, smallSilhouetteImg;
+        ofxCvGrayscaleImage		silhouetteImg;
 
         ofImage transSilhouetteImg,transSilhouetteImg2;
 
         bool live;
 
-        int inputWidht, inputHeight, smallW, smallH;
+        int inputWidth, inputHeight, smallW, smallH;
 };

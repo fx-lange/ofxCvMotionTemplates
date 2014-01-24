@@ -27,7 +27,7 @@ public:
 	void activateSilhouetteBuffer(int _bufferSize);
 	IplImage * getBufferedSilhouetteImg(int negativeIndex);
 
-	void setBlackToTransparent(ofImage & img);
+	static void setBlackToTransparent(ofImage & img);
 
 	IplImage * getMotionImage();
 	vector <ofxCvMotionBlob> & getLocalMotions();
