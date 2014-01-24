@@ -1,10 +1,8 @@
-#ifndef _TEST_APP
-#define _TEST_APP
-
-
 #include "ofMain.h"
 #include "ofxOpenCv.h"
 #include "ofxCvMotionTemplates.h"
+
+#pragma once
 
 class silhouettesApp : public ofBaseApp{
 
@@ -29,7 +27,6 @@ class silhouettesApp : public ofBaseApp{
 		ofxCvMotionTemplates * 	motionHistory;
 
         ofxCvColorImage			colorImg;
-        ofxCvGrayscaleImage		motionImg;
         ofxCvGrayscaleImage 	grayImg;
         ofxCvGrayscaleImage		silhouetteImg, smallSilhouetteImg;
 
@@ -39,5 +36,3 @@ class silhouettesApp : public ofBaseApp{
 
         int inputWidht, inputHeight, smallW, smallH;
 };
-
-#endif

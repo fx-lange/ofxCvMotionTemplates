@@ -19,7 +19,6 @@ void silhouettesApp::setup(){
 	grayImg.allocate(inputWidht,inputHeight);
 	silhouetteImg.allocate(inputWidht,inputHeight);
 	smallSilhouetteImg.allocate(smallW,smallH);
-	motionImg.allocate(inputWidht,inputHeight);
 
 	motionHistory->activateSilhouetteBuffer(10);
 }
@@ -32,7 +31,7 @@ void silhouettesApp::update(){
 		colorImg.setFromPixels(vidPlayer.getPixels(), inputWidht,inputHeight);
 
 		grayImg = colorImg;
-		motionImg = motionHistory->calculateMotions(grayImg);
+		motionHistory->calculateBuffers(grayImg);
 
 		silhouetteImg = motionHistory->getBufferedSilhouetteImg(2);
 		smallSilhouetteImg.scaleIntoMe(silhouetteImg);
@@ -44,7 +43,7 @@ void silhouettesApp::update(){
 		smallSilhouetteImg.scaleIntoMe(silhouetteImg);
 		transSilhouetteImg2.setFromPixels(smallSilhouetteImg.getPixels(),smallW,smallH,OF_IMAGE_GRAYSCALE);
 		transSilhouetteImg2.setImageType(OF_IMAGE_COLOR_ALPHA);
-		setBlackToTransparent(transSilhouetteImg2);//wird als ofx funktion benötigt
+		setBlackToTransparent(transSilhouetteImg2);//TODO should be static
 	}
 }
 
@@ -83,14 +82,6 @@ void silhouettesApp::draw(){
 	ofSetColor(35,255,25,200);
 	transSilhouetteImg.draw(0,480);
 	ofDisableAlphaBlending();
-
-	ofSetColor(255,35,48);
-	motionImg.draw(smallW,0);
-	vector <ofxCvMotionBlob> & motions = motionHistory->getLocalMotions();
-	ofSetColor(255,255,255);
-	for(int i=0;i < motions.size(); i++){
-		motions[i].draw(smallW,0);
-	}
 }
 
 //--------------------------------------------------------------

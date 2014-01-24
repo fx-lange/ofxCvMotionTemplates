@@ -25,7 +25,8 @@ void motionApp::update(){
 		colorImg.setFromPixels(vidPlayer.getPixels(), inputWidht,inputHeight);
 	}
 	grayImg = colorImg;
-	motionImg = motionHistory->calculateMotions(grayImg);
+	motionHistory->calculateMotions(grayImg);
+	motionImg = motionHistory->getMotionImage();
 }
 
 //--------------------------------------------------------------

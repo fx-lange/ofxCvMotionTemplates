@@ -85,69 +85,27 @@ void ofxCvMotionTemplates::clear(){
 	isInit = false;
 }
 
-void ofxCvMotionTemplates::activateSilhouetteBuffer(int _bufferSize){
-	if(isSilhouetteBufferActive && silhouetteBufferSize == _bufferSize){
-		return;
-	}else if(isSilhouetteBufferActive){
-		//release images and clear storage
-		for(int i=0; i < silhouetteBufferSize; i++){
-			cvReleaseImage(&(silhouetteBuffer[i]));
-			free(silhouetteBuffer[i]);
-		}
-		free(silhouetteBuffer);
-	}
-	if(_bufferSize < 1){
-		return;
-	}
-
-	lastSilhIdx = -1;
-	silhouetteBufferSize = _bufferSize;
-
-	CvSize size = cvSize(width,height);
-	silhouetteBuffer = (IplImage**)malloc(silhouetteBufferSize*sizeof(silhouetteBuffer[0]));
-	memset( silhouetteBuffer, 0, silhouetteBufferSize*sizeof(silhouetteBuffer[0]));
-
-	for(int i = 0; i < silhouetteBufferSize; i++ ) {
-		silhouetteBuffer[i] = cvCreateImage( size, IPL_DEPTH_8U, 1 );
-		cvZero( silhouetteBuffer[i] );
-	}
-
-	isSilhouetteBufferActive = true;
+void ofxCvMotionTemplates::setFrameBufferSize(int _N){
+	clear();
+	frameBufferSize = _N;
+	setup();
 }
 
-void ofxCvMotionTemplates::calculateBuffers(ofxCvGrayscaleImage & frame){
-	int idx1, idx2;
-
-	//FXTODO - memory leak? have to clear something here?
-	cvCopyImage(frame.getCvImage(),buf[lastIdx]);
-
-	idx1 = lastIdx;
-	//index of (last - (N-1))th frame
-	idx2 = (lastIdx + 1) % frameBufferSize;
-	lastIdx = idx2;
-
-	silh = buf[idx2];
-	//get difference between frames
-	cvAbsDiff( buf[idx1], buf[idx2], silh );
-	cvErode(silh,silh,0,erodeIterations);
-
-	//threshold the difference
-	cvThreshold( silh, silh, threshold,255, CV_THRESH_BINARY ); // and threshold it
-
-	if(isSilhouetteBufferActive){
-		lastSilhIdx = (lastSilhIdx + 1) % silhouetteBufferSize;
-		cvCopyImage(silh,silhouetteBuffer[lastSilhIdx]);
-	}
+int ofxCvMotionTemplates::getFrameBufferSize(){
+	return frameBufferSize;
 }
 
-IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
+
+
+void ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 	if(!isInit){
 		printf("ERROR - MotionTemplates have to be setup first!");
-		return NULL;
+		return;
 	}
 	if(!motions.empty()){
 		motions.clear();
 	}
+
 	//Declarations
 	double timestamp = (double)clock()/CLOCKS_PER_SEC; // get current time in seconds
 //	cout << "timestamp: " << timestamp << " avg ticks between:" << timestamp - lastTimestamp << endl;
@@ -258,8 +216,72 @@ IplImage* ofxCvMotionTemplates::calculateMotions(ofxCvGrayscaleImage & frame){
 
 			motions.push_back(blob);
 		}
+}
 
-	return motion;
+
+void ofxCvMotionTemplates::calculateBuffers(ofxCvGrayscaleImage & frame){
+	int idx1, idx2;
+
+	//FXTODO - memory leak? have to clear something here?
+	cvCopyImage(frame.getCvImage(),buf[lastIdx]);
+
+	idx1 = lastIdx;
+	//index of (last - (N-1))th frame
+	idx2 = (lastIdx + 1) % frameBufferSize;
+	lastIdx = idx2;
+
+	silh = buf[idx2];
+	//get difference between frames
+	cvAbsDiff( buf[idx1], buf[idx2], silh );
+	cvErode(silh,silh,0,erodeIterations);
+
+	//threshold the difference
+	cvThreshold( silh, silh, threshold,255, CV_THRESH_BINARY ); // and threshold it
+
+	if(isSilhouetteBufferActive){
+		lastSilhIdx = (lastSilhIdx + 1) % silhouetteBufferSize;
+		cvCopyImage(silh,silhouetteBuffer[lastSilhIdx]);
+	}
+}
+
+void ofxCvMotionTemplates::activateSilhouetteBuffer(int _bufferSize){
+	if(isSilhouetteBufferActive && silhouetteBufferSize == _bufferSize){
+		return; //already active and of same size
+	}else if(isSilhouetteBufferActive){
+		//release images and clear storage
+		for(int i=0; i < silhouetteBufferSize; i++){
+			cvReleaseImage(&(silhouetteBuffer[i]));
+			free(silhouetteBuffer[i]);
+		}
+		free(silhouetteBuffer);
+	}
+	if(_bufferSize < 1){
+		return;
+	}
+
+	lastSilhIdx = -1;
+	silhouetteBufferSize = _bufferSize;
+
+	CvSize size = cvSize(width,height);
+	silhouetteBuffer = (IplImage**)malloc(silhouetteBufferSize*sizeof(silhouetteBuffer[0]));
+	memset( silhouetteBuffer, 0, silhouetteBufferSize*sizeof(silhouetteBuffer[0]));
+
+	for(int i = 0; i < silhouetteBufferSize; i++ ) {
+		silhouetteBuffer[i] = cvCreateImage( size, IPL_DEPTH_8U, 1 );
+		cvZero( silhouetteBuffer[i] );
+	}
+
+	isSilhouetteBufferActive = true;
+}
+
+IplImage * ofxCvMotionTemplates::getBufferedSilhouetteImg(int negativeIndex){
+	if(isSilhouetteBufferActive){
+		int idx = (lastSilhIdx-negativeIndex) % silhouetteBufferSize;
+		idx = (idx+silhouetteBufferSize) % silhouetteBufferSize;
+		return silhouetteBuffer[idx];
+	}else{
+		return NULL;
+	}
 }
 
 void ofxCvMotionTemplates::setBlackToTransparent(ofImage & img){
@@ -276,3 +298,18 @@ void ofxCvMotionTemplates::setBlackToTransparent(ofImage & img){
 	}
 	img.update();
 }
+
+IplImage* ofxCvMotionTemplates::getMotionImage(){
+	if(!isInit){
+		printf("ERROR - ofxCvMotionTemplates have to be setup first!");
+		return NULL;
+	}
+	return motion;
+}
+
+vector <ofxCvMotionBlob> & ofxCvMotionTemplates::getLocalMotions(){
+	return motions;
+}
+
+
+
