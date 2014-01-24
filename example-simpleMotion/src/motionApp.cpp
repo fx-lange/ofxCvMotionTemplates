@@ -44,8 +44,12 @@ void motionApp::draw(){
 
 //--------------------------------------------------------------
 void motionApp::keyPressed(int key){
-	int N = motionHistory->getFrameBufferSize();
-	motionHistory->setFrameBufferSize(N+1);
+	switch(key){
+	case 'n':
+		int N = motionHistory->getFrameBufferSize();
+		motionHistory->setFrameBufferSize(N+1);
+		break;
+	}
 }
 
 //--------------------------------------------------------------
